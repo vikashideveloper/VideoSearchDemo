@@ -6,12 +6,13 @@
 //  Copyright © 2017 Vikash Kumar. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
-struct GiphyVideo {
+class GiphyVideo {
     var id = ""
     var thumbUrl = ""
     var mp4Url = ""
+    var downloadedImage: UIImage?
     
     init(_ json: [String : Any]) {
         id = (json["id"] as? String) ?? ""

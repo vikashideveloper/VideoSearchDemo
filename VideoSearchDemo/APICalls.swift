@@ -17,22 +17,25 @@ let giphyAPIKey = "958fa91a625942468d631ce9c5e49ef1"
 class APICall {
     static let shared = APICall()
     
-    let searchURL = "http://api.giphy.com/v1/gifs/search?api_key=\(giphyAPIKey)&limit=5&q="
+    let searchURL = "http://api.giphy.com/v1/gifs/search?api_key=\(giphyAPIKey)&limit=50&q="
         
-    typealias ResponseBlock = (Any?, Bool)-> Void
+    typealias ResponseBlock = (Any?, Bool, Error?)-> Void
     
     func search(keyword: String, block: @escaping ResponseBlock) {
-        let urlString = searchURL + keyword
+        let urlString = searchURL + "ronaldo"//keyword
         let url = URL(string: urlString)!
        
         URLSession.shared.dataTask(with: url) { (data, response, error) in
-            if let data = data {
-                if let json = try? JSONSerialization.jsonObject(with: data, options: [.mutableContainers]) {
-                    return block(json, true)
+            DispatchQueue.main.async {
+                if let data = data {
+                    if let json = try? JSONSerialization.jsonObject(with: data, options: [.mutableContainers]) {
+                        print(json)
+                        return block(json, true, nil)
+                    }
                 }
+                
+                block(nil, false, error)
             }
-            
-            block(nil, false)
             }.resume()
         
     }
