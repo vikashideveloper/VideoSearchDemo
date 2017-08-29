@@ -17,7 +17,6 @@ protocol VideoListView: class {
 
 class VideoListPresenter {
     weak var listView: VideoListView?
-    var service: VideoListService?
     
     init(view: VideoListView) {
         listView = view
@@ -47,6 +46,3 @@ class VideoListPresenter {
     }
 }
 
-class VideoListService {
-    
-}

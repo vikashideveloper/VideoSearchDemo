@@ -17,7 +17,7 @@ let giphyAPIKey = "958fa91a625942468d631ce9c5e49ef1"
 class APICall {
     static let shared = APICall()
     
-    let searchURL = "http://api.giphy.com/v1/gifs/search?api_key=\(giphyAPIKey)&limit=50&q="
+    let searchURL = "http://api.giphy.com/v1/gifs/search?api_key=\(giphyAPIKey)&limit=100&q="
         
     typealias ResponseBlock = (Any?, Bool, Error?)-> Void
     

@@ -16,7 +16,7 @@ class GiphyVideo {
     
     init(_ json: [String : Any]) {
         id = (json["id"] as? String) ?? ""
-        thumbUrl = (json["images"] as? [String : [String : String]])?["fixed_height"]?["url"] ?? ""
+        thumbUrl = (json["images"] as? [String : [String : String]])?["downsized_still"]?["url"] ?? ""
         mp4Url = (json["images"] as? [String : [String : String]])?["fixed_height"]?["mp4"] ?? ""
     }
 }

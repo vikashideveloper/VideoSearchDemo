@@ -71,11 +71,53 @@
                     <navigationItem key="navigationItem" id="btG-Iq-0zL"/>
                     <connections>
                         <outlet property="collView" destination="tnt-DI-DGD" id="XHF-aV-JU2"/>
+                        <segue destination="q9H-Z4-SHI" kind="presentation" identifier="toPlayerVCSegue" id="4aG-qw-PhZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="813.60000000000002" y="774.06296851574223"/>
+        </scene>
+        <!--Video PlayerVC-->
+        <scene sceneID="r0g-Qx-etV">
+            <objects>
+                <viewController id="q9H-Z4-SHI" customClass="VideoPlayerVC" customModule="VideoSearchDemo" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="e3M-pi-S7d"/>
+                        <viewControllerLayoutGuide type="bottom" id="cuY-Ss-jUP"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Aps-IW-VEW">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="kym-kd-Pr3">
+                                <rect key="frame" x="0.0" y="233.5" width="375" height="200"/>
+                                <color key="backgroundColor" red="0.9578167796" green="0.44939213989999999" blue="0.25086134669999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="200" id="DRv-nI-7bv"/>
+                                </constraints>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yEW-oH-xxX">
+                                <rect key="frame" x="9" y="28" width="46" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Back"/>
+                                <connections>
+                                    <action selector="back_btnClicked:" destination="q9H-Z4-SHI" eventType="touchUpInside" id="ZrR-Rf-QWg"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="kym-kd-Pr3" secondAttribute="trailing" id="EhF-P0-H1L"/>
+                            <constraint firstItem="kym-kd-Pr3" firstAttribute="leading" secondItem="Aps-IW-VEW" secondAttribute="leading" id="Odb-he-zF5"/>
+                            <constraint firstItem="kym-kd-Pr3" firstAttribute="centerY" secondItem="Aps-IW-VEW" secondAttribute="centerY" id="kMZ-9u-b26"/>
+                            <constraint firstItem="kym-kd-Pr3" firstAttribute="centerX" secondItem="Aps-IW-VEW" secondAttribute="centerX" id="pmp-sD-ENm"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="l9e-wg-r0K" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1496.8" y="771.36431784107947"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="LeE-Ja-Dyy">
