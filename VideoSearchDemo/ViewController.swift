@@ -8,10 +8,25 @@
 
 import UIKit
 
+struct LoadMore {
+    var searchTerm = "modi"
+    var limit = 50
+    var offset = 0
+    var totalItemCount = 0
+    var loadedItemCount = 0
+    var isLoading = false
+    
+    var canLoadMore: Bool {
+       return loadedItemCount < totalItemCount
+    }
+}
+
 class ViewController: UIViewController {
 
     @IBOutlet var collView: UICollectionView!
     var videos = [GiphyVideo]()
+    
+    var loadMore = LoadMore()
     
     let sectionInsetValue:CGFloat = 8
     let itemSpacing:CGFloat = 8
@@ -24,12 +39,21 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         listPresenter = VideoListPresenter(view: self)
-        listPresenter?.getVideos(by: "")
+        listPresenter?.getVideos(by: loadMore.searchTerm, offset: loadMore.offset, limit: loadMore.limit)
         transition.delegate = self
 
     }
+    
+    func loadMoreData() {
+        if loadMore.isLoading || !loadMore.canLoadMore {return}
+        loadMore.isLoading = true
+        listPresenter?.getVideos(by: loadMore.searchTerm, offset: loadMore.offset, limit: loadMore.limit)
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let playerVC = segue.destination as! VideoPlayerVC
+        let indexPath = sender as! IndexPath
+        playerVC.video = videos[indexPath.row]
         playerVC.transitioningDelegate = self
         playerVC.modalPresentationStyle = .custom
     }
@@ -61,12 +85,15 @@ extension ViewController : UICollectionViewDataSource, UICollectionViewDelegateF
             }
         }
         
+        if indexPath.item == (videos.count-1) {
+            self.loadMoreData()
+        }
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         selectedIndexPath = indexPath
-        self.performSegue(withIdentifier: "toPlayerVCSegue", sender: nil)
+        self.performSegue(withIdentifier: "toPlayerVCSegue", sender: indexPath)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -131,10 +158,23 @@ extension ViewController : VideoListView {
         
     }
     
-    func setListItem(videos: [GiphyVideo]) {
+    func setListItem(videos: [GiphyVideo], totalItems: Int) {
         print(videos)
-        self.videos = videos
-        collView.reloadData()
+        loadMore.offset += 1
+        loadMore.isLoading = false
+        loadMore.totalItemCount = totalItems
+        loadMore.loadedItemCount += videos.count
+        
+        var preCount = self.videos.count
+        self.videos += videos
+        
+        let indexPaths = videos.map({ _ -> IndexPath in
+          let index = IndexPath(item: preCount, section: 0)
+            preCount += 1
+            return index
+        })
+        
+        collView.insertItems(at: indexPaths)
     }
 }
 
@@ -175,8 +215,9 @@ extension ViewController: CustomTranstionDelegate {
     }
     
     func animationEndFrame() -> CGRect {
-        let y = self.view.frame.height/2 - 100
-        return CGRect(x: 0, y: y, width: self.view.frame.width, height: 200)
+        let imgHeight = videos[selectedIndexPath!.item].height
+        let y = (self.view.frame.height/2) - (imgHeight/2)
+        return CGRect(x: 0, y: y, width: self.view.frame.width, height: imgHeight)
     }
 }
 

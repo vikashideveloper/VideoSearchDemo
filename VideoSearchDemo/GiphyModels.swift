@@ -13,10 +13,16 @@ class GiphyVideo {
     var thumbUrl = ""
     var mp4Url = ""
     var downloadedImage: UIImage?
+    var height: CGFloat = 0
+    var widht: CGFloat = 0
     
     init(_ json: [String : Any]) {
         id = (json["id"] as? String) ?? ""
         thumbUrl = (json["images"] as? [String : [String : String]])?["downsized_still"]?["url"] ?? ""
         mp4Url = (json["images"] as? [String : [String : String]])?["fixed_height"]?["mp4"] ?? ""
+        let h = (json["images"] as? [String : [String : String]])?["original"]?["height"] ?? "0"
+        let w = (json["images"] as? [String : [String : String]])?["original"]?["width"] ?? "0"
+        height = CGFloat(Float(h)!)
+        widht = CGFloat(Float(w)!)
     }
 }

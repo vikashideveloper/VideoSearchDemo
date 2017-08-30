@@ -17,7 +17,7 @@ protocol CustomTranstionDelegate: NSObjectProtocol {
 class CustomTranstion: NSObject {
     var animatingView = UIView()
     weak var delegate: CustomTranstionDelegate?
-    var duration = 0.5
+    var duration = 0.3
     
     var startCenter = CGPoint.zero
     
@@ -39,22 +39,29 @@ extension CustomTranstion : UIViewControllerAnimatedTransitioning {
     
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         let containerView = transitionContext.containerView
-        
+
         if transitionModelState == .present {
             if let presentedView = transitionContext.view(forKey: UITransitionContextViewKey.to) {
                 animatingView = UIView()
                 animatingView.frame = delegate?.animationStartFrame() ?? CGRect.zero
                 animatingView.backgroundColor = UIColor.red
                 presentedView.alpha = 0
+                let imageView = UIImageView(frame: animatingView.bounds)
+                imageView.image = delegate?.animatingImage()
+
+                animatingView.addSubview(imageView)
                 containerView.addSubview(presentedView)
                 containerView.addSubview(animatingView)
 
                 UIView.animate(withDuration: duration, animations: {
                     self.animatingView.frame = self.delegate?.animationEndFrame() ?? CGRect.zero
-                    presentedView.alpha = 0.6
+                    imageView.frame = self.animatingView.bounds
                 }, completion: { (success:Bool) in
-                    self.animatingView.removeFromSuperview()
-                    presentedView.alpha = 1.0
+                    UIView.animate(withDuration: 0.2, animations: {
+                        presentedView.alpha = 1.0
+                    }, completion: { (success:Bool) in
+                        self.animatingView.removeFromSuperview()
+                    })
                     transitionContext.completeTransition(success)
                 })
             }
@@ -64,10 +71,16 @@ extension CustomTranstion : UIViewControllerAnimatedTransitioning {
             if let returningView = transitionContext.view(forKey: transitionModeKey) {
                 animatingView.frame = delegate?.animationEndFrame() ?? CGRect.zero
                 animatingView.backgroundColor  = UIColor.gray
+                animatingView.subviews.forEach({v in v.removeFromSuperview()})
+                let imageView = UIImageView(frame: animatingView.bounds)
+                imageView.image = delegate?.animatingImage()
+                animatingView.addSubview(imageView)
+
                 containerView.addSubview(animatingView)
                 returningView.alpha = 0.0
                 UIView.animate(withDuration: duration, animations: {
-                self.animatingView.frame = self.delegate?.animationStartFrame() ?? .zero
+                    self.animatingView.frame = self.delegate?.animationStartFrame() ?? .zero
+                    imageView.frame = self.animatingView.bounds
                     if self.transitionModelState == .pop {
                         containerView.insertSubview(returningView, belowSubview: returningView)
                         containerView.insertSubview(self.animatingView, belowSubview: returningView)
