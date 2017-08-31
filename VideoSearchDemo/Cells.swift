@@ -11,6 +11,8 @@ import UIKit
 class VideoCardCell: UICollectionViewCell {
     @IBOutlet var lblTitle: UILabel!
     @IBOutlet var imgView: UIImageView!
+    @IBOutlet var btnLike: UIButton!
+    @IBOutlet var btnUnlike: UIButton!
     
     func setVideoData(_ video: GiphyVideo) {
         if let thumbURl = URL(string: video.thumbUrl) {

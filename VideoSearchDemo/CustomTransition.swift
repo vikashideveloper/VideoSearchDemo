@@ -44,11 +44,12 @@ extension CustomTranstion : UIViewControllerAnimatedTransitioning {
             if let presentedView = transitionContext.view(forKey: UITransitionContextViewKey.to) {
                 animatingView = UIView()
                 animatingView.frame = delegate?.animationStartFrame() ?? CGRect.zero
-                animatingView.backgroundColor = UIColor.red
+                animatingView.backgroundColor = UIColor.clear
                 presentedView.alpha = 0
                 let imageView = UIImageView(frame: animatingView.bounds)
                 imageView.image = delegate?.animatingImage()
-
+                imageView.contentMode = .scaleAspectFit
+                imageView.clipsToBounds = true
                 animatingView.addSubview(imageView)
                 containerView.addSubview(presentedView)
                 containerView.addSubview(animatingView)
@@ -70,10 +71,10 @@ extension CustomTranstion : UIViewControllerAnimatedTransitioning {
             
             if let returningView = transitionContext.view(forKey: transitionModeKey) {
                 animatingView.frame = delegate?.animationEndFrame() ?? CGRect.zero
-                animatingView.backgroundColor  = UIColor.gray
                 animatingView.subviews.forEach({v in v.removeFromSuperview()})
                 let imageView = UIImageView(frame: animatingView.bounds)
                 imageView.image = delegate?.animatingImage()
+                imageView.contentMode = .scaleAspectFit
                 animatingView.addSubview(imageView)
 
                 containerView.addSubview(animatingView)

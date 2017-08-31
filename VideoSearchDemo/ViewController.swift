@@ -8,22 +8,12 @@
 
 import UIKit
 
-struct LoadMore {
-    var searchTerm = "modi"
-    var limit = 50
-    var offset = 0
-    var totalItemCount = 0
-    var loadedItemCount = 0
-    var isLoading = false
-    
-    var canLoadMore: Bool {
-       return loadedItemCount < totalItemCount
-    }
-}
-
 class ViewController: UIViewController {
 
+    @IBOutlet var searchBar: UISearchBar!
     @IBOutlet var collView: UICollectionView!
+    @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
+
     var videos = [GiphyVideo]()
     
     var loadMore = LoadMore()
@@ -38,6 +28,7 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationItem.titleView = searchBar
         listPresenter = VideoListPresenter(view: self)
         listPresenter?.getVideos(by: loadMore.searchTerm, offset: loadMore.offset, limit: loadMore.limit)
         transition.delegate = self
@@ -60,7 +51,23 @@ class ViewController: UIViewController {
 
 }
 
-//MARK: CollectionView DataSource and Delegate
+
+//MARK:- CollectionView DataSource and Delegate
+extension ViewController : UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        if let searchTerm = searchBar.text {
+            let trimmedText = searchTerm.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+            if !trimmedText.isEmpty {
+                loadMore.reset()
+                loadMore.searchTerm = trimmedText
+                listPresenter?.getVideos(by: trimmedText, offset: loadMore.offset, limit: loadMore.limit)
+            }
+        }
+    }
+}
+
+
+//MARK:- CollectionView DataSource and Delegate
 extension ViewController : UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -73,7 +80,7 @@ extension ViewController : UICollectionViewDataSource, UICollectionViewDelegateF
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! VideoCardCell
-        cell.backgroundColor = UIColor.gray
+        cell.backgroundColor = UIColor.black
         let item = videos[indexPath.row]
        
         if let image = item.downloadedImage {
@@ -97,7 +104,7 @@ extension ViewController : UICollectionViewDataSource, UICollectionViewDelegateF
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let numberOfItemInRow:CGFloat = 4
+        let numberOfItemInRow:CGFloat = 3
         let sectionInset:CGFloat = sectionInsetValue * 2
         let width = (collectionView.frame.width - (sectionInset + ((numberOfItemInRow-1) * itemSpacing)))/numberOfItemInRow
         return CGSize(width: width, height: width)
@@ -125,12 +132,14 @@ extension ViewController : UICollectionViewDataSource, UICollectionViewDelegateF
         }
     }
     
+    //MARK:- Download Thumbnail Images
     func downloadImagesForVisibleCells() {
         for cell in collView.visibleCells as! [VideoCardCell] {
             let indexPath = collView.indexPath(for: cell)!
             let video = videos[indexPath.item]
-            if let image = video.downloadedImage {
-             cell.imgView.image = image
+            
+            if let _ = video.downloadedImage {
+             //cell.imgView.image = image
             } else {
                 cell.imgView.image = nil
                 loadThumImageFor(video: video, for: cell)
@@ -149,36 +158,48 @@ extension ViewController : UICollectionViewDataSource, UICollectionViewDelegateF
     }
 }
 
+
+//MARK:- VideoListView delegate
 extension ViewController : VideoListView {
     func startLoading() {
-        
+        if loadMore.offset == 0 {
+            loadingIndicator.startAnimating()
+        }
     }
     
     func stopLoading() {
-        
+        loadingIndicator.stopAnimating()
     }
     
     func setListItem(videos: [GiphyVideo], totalItems: Int) {
-        print(videos)
+        
+        if loadMore.offset == 0{
+            self.videos.removeAll()
+            self.videos = videos
+            collView.reloadData()
+            
+        } else {
+            var preCount = self.videos.count
+            self.videos += videos
+
+            let indexPaths = videos.map({ _ -> IndexPath in
+                let index = IndexPath(item: preCount, section: 0)
+                preCount += 1
+                return index
+            })
+            
+            collView.insertItems(at: indexPaths)
+        }
+        
         loadMore.offset += 1
         loadMore.isLoading = false
         loadMore.totalItemCount = totalItems
         loadMore.loadedItemCount += videos.count
-        
-        var preCount = self.videos.count
-        self.videos += videos
-        
-        let indexPaths = videos.map({ _ -> IndexPath in
-          let index = IndexPath(item: preCount, section: 0)
-            preCount += 1
-            return index
-        })
-        
-        collView.insertItems(at: indexPaths)
     }
 }
 
 
+//MARK:- UIViewControllerTransitioningDelegate
 extension ViewController : UIViewControllerTransitioningDelegate {
     func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         transition.transitionModelState = .present
@@ -193,6 +214,8 @@ extension ViewController : UIViewControllerTransitioningDelegate {
     
 }
 
+
+//MARK:- CustomTranstionDelegate
 extension ViewController: CustomTranstionDelegate {
     func animatingImage() -> UIImage? {
         if let indexPath = selectedIndexPath {
@@ -218,6 +241,27 @@ extension ViewController: CustomTranstionDelegate {
         let imgHeight = videos[selectedIndexPath!.item].height
         let y = (self.view.frame.height/2) - (imgHeight/2)
         return CGRect(x: 0, y: y, width: self.view.frame.width, height: imgHeight)
+    }
+}
+
+
+//MARK:- LoadMore
+struct LoadMore {
+    var searchTerm = "India"
+    var limit = 50
+    var offset = 0
+    var totalItemCount = 0
+    var loadedItemCount = 0
+    var isLoading = false
+    
+    var canLoadMore: Bool {
+        return loadedItemCount < totalItemCount
+    }
+    
+    mutating func reset() {
+        offset = 0
+        totalItemCount = 0
+        loadedItemCount = 0
     }
 }
 
