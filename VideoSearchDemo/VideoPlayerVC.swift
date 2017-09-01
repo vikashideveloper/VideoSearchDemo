@@ -16,6 +16,7 @@ class VideoPlayerVC: UIViewController {
     
     var video:GiphyVideo!
     var avPlayer: AVPlayer!
+    var avLayer: AVPlayerLayer!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,10 +24,10 @@ class VideoPlayerVC: UIViewController {
         imgViewHeight.constant = video.height
       
         if let videoURL = URL(string: video.mp4Url) {
-            let avPlayer = AVPlayer(url: videoURL)
-            let avPlayerLayer = AVPlayerLayer(player: avPlayer)
-            avPlayerLayer.frame = self.view.bounds
-            self.view.layer.addSublayer(avPlayerLayer)
+            avPlayer = AVPlayer(url: videoURL)
+            avLayer = AVPlayerLayer(player: avPlayer)
+            avLayer.frame = self.view.bounds
+            self.view.layer.addSublayer(avLayer)
             avPlayer.play()
             
         } else {
@@ -37,5 +38,11 @@ class VideoPlayerVC: UIViewController {
     
     @IBAction func back_btnClicked(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        var fr = avLayer.frame
+        fr.size = size
+        avLayer.frame = fr
     }
 }

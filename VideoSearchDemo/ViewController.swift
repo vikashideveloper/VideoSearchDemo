@@ -51,7 +51,13 @@ class ViewController: UIViewController {
         playerVC.modalPresentationStyle = .custom
     }
 
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        collView.reloadData()
+    }
+
 }
+
 
 
 //MARK:- CollectionView DataSource and Delegate
