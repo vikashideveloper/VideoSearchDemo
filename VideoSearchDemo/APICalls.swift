@@ -23,7 +23,9 @@ class APICall {
     
     func search(keyword: String, offset: Int, limit: Int,  block: @escaping ResponseBlock) {
         
-        let urlString = searchURL + "&limit=\(limit)&offset=\(offset)&q=\(keyword)"
+        let keyworkdWithPlus = keyword.replacingOccurrences(of: " ", with: "+")
+        let urlString = searchURL + "&limit=\(limit)&offset=\(offset)&q=\(keyworkdWithPlus)"
+        //let newURl = urlString.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
         let url = URL(string: urlString)!
        
         URLSession.shared.dataTask(with: url) { (data, response, error) in

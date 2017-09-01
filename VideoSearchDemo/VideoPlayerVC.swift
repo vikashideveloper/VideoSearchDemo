@@ -22,14 +22,16 @@ class VideoPlayerVC: UIViewController {
         thumbImageView.image = video.downloadedImage
         imgViewHeight.constant = video.height
       
-        let videoURL = NSURL(string: video.mp4Url)
-        let playerAV = AVPlayer(url: videoURL! as URL)
-        let playerLayerAV = AVPlayerLayer(player: playerAV)
-        playerLayerAV.frame = self.view.bounds
-        //playerLayerAV.contentsGravity = kCAGravityCenter
-        self.view.layer.addSublayer(playerLayerAV)
-        playerAV.play()
-        
+        if let videoURL = URL(string: video.mp4Url) {
+            let avPlayer = AVPlayer(url: videoURL)
+            let avPlayerLayer = AVPlayerLayer(player: avPlayer)
+            avPlayerLayer.frame = self.view.bounds
+            self.view.layer.addSublayer(avPlayerLayer)
+            avPlayer.play()
+            
+        } else {
+            //
+        }
         
     }
     

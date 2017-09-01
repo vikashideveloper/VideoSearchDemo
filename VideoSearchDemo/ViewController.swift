@@ -20,6 +20,7 @@ class ViewController: UIViewController {
     
     let sectionInsetValue:CGFloat = 8
     let itemSpacing:CGFloat = 8
+    let numberOfItemInRow:CGFloat = 3
     
     var listPresenter: VideoListPresenter?
     let transition = CustomTranstion()
@@ -36,9 +37,10 @@ class ViewController: UIViewController {
     }
     
     func loadMoreData() {
-        if loadMore.isLoading || !loadMore.canLoadMore {return}
-        loadMore.isLoading = true
-        listPresenter?.getVideos(by: loadMore.searchTerm, offset: loadMore.offset, limit: loadMore.limit)
+        if loadMore.canLoadMore {
+            loadMore.isLoading = true
+            listPresenter?.getVideos(by: loadMore.searchTerm, offset: loadMore.offset, limit: loadMore.limit)
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -104,7 +106,6 @@ extension ViewController : UICollectionViewDataSource, UICollectionViewDelegateF
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let numberOfItemInRow:CGFloat = 3
         let sectionInset:CGFloat = sectionInsetValue * 2
         let width = (collectionView.frame.width - (sectionInset + ((numberOfItemInRow-1) * itemSpacing)))/numberOfItemInRow
         return CGSize(width: width, height: width)
@@ -173,18 +174,18 @@ extension ViewController : VideoListView {
     
     func setListItem(videos: [GiphyVideo], totalItems: Int) {
         
-        if loadMore.offset == 0{
+        if loadMore.offset == 0{// first page loading, reset videos array.
             self.videos.removeAll()
             self.videos = videos
             collView.reloadData()
             
         } else {
-            var preCount = self.videos.count
+            var prevVideoCount = self.videos.count
             self.videos += videos
 
             let indexPaths = videos.map({ _ -> IndexPath in
-                let index = IndexPath(item: preCount, section: 0)
-                preCount += 1
+                let index = IndexPath(item: prevVideoCount, section: 0)
+                prevVideoCount += 1
                 return index
             })
             
@@ -247,7 +248,7 @@ extension ViewController: CustomTranstionDelegate {
 
 //MARK:- LoadMore
 struct LoadMore {
-    var searchTerm = "India"
+    var searchTerm = "India" //Default term
     var limit = 50
     var offset = 0
     var totalItemCount = 0
@@ -255,7 +256,7 @@ struct LoadMore {
     var isLoading = false
     
     var canLoadMore: Bool {
-        return loadedItemCount < totalItemCount
+        return (loadedItemCount < totalItemCount) && !isLoading
     }
     
     mutating func reset() {

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		135A40A21F5966660063404B /* VideoSearchDemo.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 135A40A01F5966660063404B /* VideoSearchDemo.xcdatamodeld */; };
 		135B1C321F5588270005FE97 /* CustomTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 135B1C311F5588270005FE97 /* CustomTransition.swift */; };
 		135B1C341F559B700005FE97 /* VideoPlayerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 135B1C331F559B700005FE97 /* VideoPlayerVC.swift */; };
 		135BE0481F5177C3003C255E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 135BE0471F5177C3003C255E /* AppDelegate.swift */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		135A40A11F5966660063404B /* VideoSearchDemo.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = VideoSearchDemo.xcdatamodel; sourceTree = "<group>"; };
 		135B1C311F5588270005FE97 /* CustomTransition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTransition.swift; sourceTree = "<group>"; };
 		135B1C331F559B700005FE97 /* VideoPlayerVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoPlayerVC.swift; sourceTree = "<group>"; };
 		135BE0441F5177C3003C255E /* VideoSearchDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VideoSearchDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -94,6 +96,7 @@
 		135BE05C1F517AA6003C255E /* SupportingFiles */ = {
 			isa = PBXGroup;
 			children = (
+				135A40A01F5966660063404B /* VideoSearchDemo.xcdatamodeld */,
 				135BE0531F5177C4003C255E /* Info.plist */,
 				1367F7531F541BAD00E58C48 /* Extension.swift */,
 			);
@@ -190,6 +193,7 @@
 				135BE0481F5177C3003C255E /* AppDelegate.swift in Sources */,
 				135BE05A1F517A64003C255E /* APICalls.swift in Sources */,
 				135B1C321F5588270005FE97 /* CustomTransition.swift in Sources */,
+				135A40A21F5966660063404B /* VideoSearchDemo.xcdatamodeld in Sources */,
 				135B1C341F559B700005FE97 /* VideoPlayerVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -359,6 +363,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		135A40A01F5966660063404B /* VideoSearchDemo.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				135A40A11F5966660063404B /* VideoSearchDemo.xcdatamodel */,
+			);
+			currentVersion = 135A40A11F5966660063404B /* VideoSearchDemo.xcdatamodel */;
+			path = VideoSearchDemo.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 135BE03C1F5177C3003C255E /* Project object */;
 }
