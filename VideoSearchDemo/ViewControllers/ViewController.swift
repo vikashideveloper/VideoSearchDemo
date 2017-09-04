@@ -216,10 +216,11 @@ extension ViewController : VideoListView {
             collView.insertItems(at: indexPaths)
         }
         
-        loadMore.offset += 1
         loadMore.isLoading = false
         loadMore.totalItemCount = totalItems
         loadMore.loadedItemCount += videos.count
+        loadMore.offset += videos.count
+
     }
     
 }
