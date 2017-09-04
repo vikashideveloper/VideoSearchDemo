@@ -40,10 +40,13 @@ class VideoListPresenter {
                             }
                             return vdo
                         })
+                        
                         self.listView?.setListItem(videos: videoList, totalItems: totlaCount)
+                        
                     } else {
                         self.listView?.setListItem(videos: [], totalItems: 0)
                     }
+                    
                 } else {
                     self.listView?.setListItem(videos: [], totalItems: 0)
                 }

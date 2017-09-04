@@ -77,12 +77,12 @@
 			isa = PBXGroup;
 			children = (
 				135BE0471F5177C3003C255E /* AppDelegate.swift */,
+				135BE05B1F517A7F003C255E /* Storyboard */,
 				791789A01F5BD10800C1176F /* ViewControllers */,
 				791789991F5BD0D900C1176F /* CoreData */,
-				135BE05B1F517A7F003C255E /* Storyboard */,
-				135BE04E1F5177C4003C255E /* Assets.xcassets */,
 				791789AA1F5BD12C00C1176F /* Others */,
 				135BE05C1F517AA6003C255E /* SupportingFiles */,
+				135BE04E1F5177C4003C255E /* Assets.xcassets */,
 			);
 			path = VideoSearchDemo;
 			sourceTree = "<group>";
