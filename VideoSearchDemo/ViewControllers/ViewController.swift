@@ -55,11 +55,15 @@ class ViewController: UIViewController {
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         collView.reloadData()
     }
-
     
+}
+
+
+//MARK:- IBActions
+extension ViewController {
     @IBAction func likeBtnClicked(_ sender: UIButton) {
         let video = videos[sender.tag]
-       
+        
         listPresenter?.likeUnLikeVideo(video, block: {[weak self] success in
             let indexPath = IndexPath(item: sender.tag, section: 0)
             if let cell = self?.collView.cellForItem(at: indexPath) as? VideoCardCell {
@@ -67,9 +71,8 @@ class ViewController: UIViewController {
             }
         })
     }
+
 }
-
-
 
 //MARK:- CollectionView DataSource and Delegate
 extension ViewController : UISearchBarDelegate {
