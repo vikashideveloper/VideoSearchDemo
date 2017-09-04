@@ -7,16 +7,18 @@
 //
 
 import UIKit
+import AVKit
 import AVFoundation
 
 class VideoPlayerVC: UIViewController {
     @IBOutlet var thumbImageView: UIImageView!
-    
+    @IBOutlet var backBtn: UIButton!
     @IBOutlet weak var imgViewHeight: NSLayoutConstraint!
     
     var video:GiphyVideo!
     var avPlayer: AVPlayer!
     var avLayer: AVPlayerLayer!
+    var playerVC: AVPlayerViewController!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,17 +26,18 @@ class VideoPlayerVC: UIViewController {
         imgViewHeight.constant = video.height
       
         if let videoURL = URL(string: video.mp4Url) {
-            avPlayer = AVPlayer(url: videoURL)
-            avLayer = AVPlayerLayer(player: avPlayer)
-            avLayer.frame = self.view.bounds
-            self.view.layer.addSublayer(avLayer)
-            avPlayer.play()
+                avPlayer = AVPlayer(url: videoURL)
+                avLayer = AVPlayerLayer(player: avPlayer)
+                avLayer.frame = self.view.bounds
+                self.view.layer.addSublayer(avLayer)
+                avPlayer.play()
             
         } else {
             //
         }
         
     }
+    
     
     @IBAction func back_btnClicked(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
@@ -45,4 +48,6 @@ class VideoPlayerVC: UIViewController {
         fr.size = size
         avLayer.frame = fr
     }
+    
 }
+

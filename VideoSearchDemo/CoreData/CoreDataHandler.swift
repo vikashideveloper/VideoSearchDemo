@@ -9,31 +9,46 @@
 import Foundation
 import CoreData
 
-class CoreDataHandler {
-    static let shared = CoreDataHandler()
+class CDHelper {
+    static let shared = CDHelper()
     
     var context: NSManagedObjectContext {
         return appDelegate.persistentContainer.viewContext
     }
     
     func likeUnlikeVideo(_ video: GiphyVideo, block: (Bool)->Void) {
-        let predicate = NSPredicate(format: "videoID = %@", video.id)
-        let req = NSFetchRequest<VideoLike>(entityName: "Video")
-        req.predicate = predicate
-        
         do {
-            let result = try context.fetch(req)
-            if let vdo = result.first {
+            if let vdo = getVideoLike(video.id) {
                 vdo.like = video.youLike
             } else {
-                let vdo = VideoLike(context: context)
+                let vdo = NSEntityDescription.insertNewObject(forEntityName: "VideoLike", into: context) as! VideoLike
                 vdo.like = video.youLike
+                vdo.videoID  = video.id
             }
             
             try context.save()
+            block(true)
             
         } catch let error {
             print(error.localizedDescription )
+            block(false)
         }
+    }
+    
+    //Get videoLike by video id.
+    func getVideoLike(_ videoID: String)-> VideoLike? {
+        let predicate = NSPredicate(format: "videoID = %@", videoID)
+        let req = NSFetchRequest<VideoLike>(entityName: "VideoLike")
+        req.predicate = predicate
+
+        do {
+            let result = try context.fetch(req)
+            return result.first
+            
+        } catch let error {
+            print(error.localizedDescription )
+           return nil
+        }
+
     }
 }

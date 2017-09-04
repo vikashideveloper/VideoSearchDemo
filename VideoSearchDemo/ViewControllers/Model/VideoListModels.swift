@@ -32,7 +32,14 @@ class VideoListPresenter {
                     let totlaCount = (json["pagination"] as? [String : Int])?["total_count"] ?? 0
                     
                     if let jsonResults = json["data"] as? [[String : Any]] {
-                        let videoList = jsonResults.map({GiphyVideo($0)})
+                        let videoList = jsonResults.map({ vJson -> GiphyVideo in
+                            let vdo = GiphyVideo(vJson)
+                           
+                            if let vl = CDHelper.shared.getVideoLike(vdo.id) {
+                                vdo.youLike = vl.like
+                            }
+                            return vdo
+                        })
                         self.listView?.setListItem(videos: videoList, totalItems: totlaCount)
                     } else {
                         self.listView?.setListItem(videos: [], totalItems: 0)
@@ -44,6 +51,13 @@ class VideoListPresenter {
             } else {
                 
             }
+        }
+    }
+    
+    func likeUnLikeVideo(_ video: GiphyVideo, block: (Bool)->Void) {
+        video.youLike = !video.youLike
+        CDHelper.shared.likeUnlikeVideo(video) { (success) in
+           block(success)
         }
     }
 }

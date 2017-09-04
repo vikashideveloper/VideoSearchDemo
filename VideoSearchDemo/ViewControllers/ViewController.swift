@@ -33,7 +33,6 @@ class ViewController: UIViewController {
         listPresenter = VideoListPresenter(view: self)
         listPresenter?.getVideos(by: loadMore.searchTerm, offset: loadMore.offset, limit: loadMore.limit)
         transition.delegate = self
-//
     }
     
     func loadMoreData() {
@@ -43,6 +42,7 @@ class ViewController: UIViewController {
         }
     }
     
+    //MARK: Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let playerVC = segue.destination as! VideoPlayerVC
         let indexPath = sender as! IndexPath
@@ -56,6 +56,17 @@ class ViewController: UIViewController {
         collView.reloadData()
     }
 
+    
+    @IBAction func likeBtnClicked(_ sender: UIButton) {
+        let video = videos[sender.tag]
+       
+        listPresenter?.likeUnLikeVideo(video, block: {[weak self] success in
+            let indexPath = IndexPath(item: sender.tag, section: 0)
+            if let cell = self?.collView.cellForItem(at: indexPath) as? VideoCardCell {
+                cell.setLikeBtn(isLike: video.youLike)
+            }
+        })
+    }
 }
 
 
@@ -92,6 +103,7 @@ extension ViewController : UICollectionViewDataSource, UICollectionViewDelegateF
         let item = videos[indexPath.row]
         
         cell.setLikeBtn(isLike: item.youLike)
+        cell.btnLike.tag = indexPath.row
         
         if let image = item.downloadedImage {
             cell.imgView.image = image
@@ -206,6 +218,7 @@ extension ViewController : VideoListView {
         loadMore.totalItemCount = totalItems
         loadMore.loadedItemCount += videos.count
     }
+    
 }
 
 
