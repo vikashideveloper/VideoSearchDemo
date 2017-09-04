@@ -15,6 +15,8 @@ class GiphyVideo {
     var downloadedImage: UIImage?
     var height: CGFloat = 0
     var widht: CGFloat = 0
+   
+    var youLike = false
     
     init(_ json: [String : Any]) {
         id = (json["id"] as? String) ?? ""

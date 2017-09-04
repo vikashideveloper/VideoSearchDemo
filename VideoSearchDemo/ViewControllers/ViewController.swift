@@ -90,7 +90,9 @@ extension ViewController : UICollectionViewDataSource, UICollectionViewDelegateF
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! VideoCardCell
         cell.backgroundColor = UIColor.black
         let item = videos[indexPath.row]
-       
+        
+        cell.setLikeBtn(isLike: item.youLike)
+        
         if let image = item.downloadedImage {
             cell.imgView.image = image
         } else {
@@ -100,6 +102,7 @@ extension ViewController : UICollectionViewDataSource, UICollectionViewDelegateF
             }
         }
         
+        //load more items 
         if indexPath.item == (videos.count-1) {
             self.loadMoreData()
         }

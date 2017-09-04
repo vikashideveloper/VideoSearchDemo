@@ -12,7 +12,6 @@ class VideoCardCell: UICollectionViewCell {
     @IBOutlet var lblTitle: UILabel!
     @IBOutlet var imgView: UIImageView!
     @IBOutlet var btnLike: UIButton!
-    @IBOutlet var btnUnlike: UIButton!
     
     func setVideoData(_ video: GiphyVideo) {
         if let thumbURl = URL(string: video.thumbUrl) {
@@ -21,5 +20,9 @@ class VideoCardCell: UICollectionViewCell {
             //set default image
             imgView.image = nil
         }
+    }
+    
+    func setLikeBtn(isLike: Bool) {
+        btnLike.tintColor = isLike ? UIColor.green : UIColor.gray
     }
 }
